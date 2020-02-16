@@ -24,8 +24,6 @@ SIMO is a library for JavaScript (for use in the Node and Browser
 environment), providing simple mutable objects with the automatic and
 detailed tracking of changes.
 
-FIXME
-
 Example
 -------
 
