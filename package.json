@@ -1,6 +1,6 @@
 {
     "name":        "simo",
-    "version":     "0.9.0",
+    "version":     "0.9.1",
     "description": "Simple Mutable Objects with Change Tracking",
     "keywords":    [ "mutable", "object", "change", "tracking", "proxy" ],
     "main":        "lib/simo.node.js",
