@@ -42,7 +42,6 @@ let obj = {
 }
 
 console.log(obj)
-console.log(JSON.stringify(obj))
 
 obj = simo.cover(obj)
 simo.observe(obj, (event, ...args) => {
@@ -64,5 +63,4 @@ obj.foo.bar.set.delete("v1")
 obj.foo.bar.func()
 
 console.log(obj)
-console.log(JSON.stringify(obj))
 

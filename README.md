@@ -51,7 +51,6 @@ let obj = {
 }
 
 console.log(obj)
-console.log(JSON.stringify(obj))
 
 obj = simo.cover(obj)
 simo.observe(obj, (event, ...args) => {
@@ -73,7 +72,6 @@ obj.foo.bar.set.delete("v1")
 obj.foo.bar.func()
 
 console.log(obj)
-console.log(JSON.stringify(obj))
 ```
 
 Output:
@@ -95,7 +93,6 @@ Output:
     }
   }
 }
-{"foo":{"bar":{"boolean":true,"number":42,"string":"foo","regexp":{},"date":"2020-01-01T00:00:00.000Z","object":{"k1":"v1","k2":"v2"},"array":["v1","v2"],"map":{},"set":{}}}}
 change [ 'foo.bar.boolean', true, false ]
 change [ 'foo.bar.number', 42, 7 ]
 change [ 'foo.bar.regexp', /foo/i, /bar/ ]
@@ -124,7 +121,6 @@ change [ 'foo.bar.array.3', undefined, 'baz' ]
     }
   }
 }
-{"foo":{"bar":{"boolean":false,"number":7,"string":"bar","regexp":{},"date":"2020-01-01T00:00:01.000Z","object":{"k1":"v1","k2":"bar"},"array":["v1","v2","bar","baz"],"map":{},"set":{}}}}
 ```
 
 Application Programming Interface
