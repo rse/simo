@@ -141,8 +141,11 @@ SIMO provides the following API:
 Implementation Notice
 ---------------------
 
-SIMO is written in ECMAScript 6 and relies on the [`Proxy`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) and
-[`Reflect`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect) APIs. There are two transpilation results: first, there is
+SIMO is written in ECMAScript 6 and relies on the [`Proxy`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy),
+[`Reflect`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect) 
+and
+[`Symbol`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol) 
+APIs. There are two transpilation results: first, there is
 `simo.browser.js` for Browser environments. This is a size-compressed
 variant with included dependencies. Second, there is `simo.node.js` for
 Node.js environments. This is a variant without compression and included
