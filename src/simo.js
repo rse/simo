@@ -40,11 +40,14 @@ const api = {
     /*  API function: cover an object for observing changes  */
     cover (object) {
         /*  instanciate the Proxy context  */
-        const ctx = simoContext(api)
+        const ctx = simoContext(api, object)
         simoProxyOpaque(ctx)
         simoProxyMap(ctx)
         simoProxySet(ctx)
         simoProxyObject(ctx)
+
+        /*  remember root target object  */
+        ctx.root = object
 
         /*  create a covering root Proxy object  */
         return ctx.coveringProxy(object)

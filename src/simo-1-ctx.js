@@ -41,11 +41,14 @@ module.exports = (api) => {
         /*  the Proxy object handlers  */
         handlers: [],
 
-        /*  the store for target paths, proxy objects and properties descriptors  */
+        /*  the root target object  */
+        root: null,
+
+        /*  the internal store  */
         store: {
-            path:  new WeakMap(), /* maps targets to path   */
-            proxy: new WeakMap(), /* maps targets to proxy  */
-            prop:  new WeakMap()  /* maps targets to property descriptors  */
+            path:  new WeakMap(), /* maps target to path   */
+            proxy: new WeakMap(), /* maps target to proxy  */
+            prop:  new WeakMap()  /* maps target to property descriptor  */
         },
 
         /*
@@ -61,9 +64,10 @@ module.exports = (api) => {
 
             /*  "uncover"  */
             [api.METHOD_UNCOVER] (proxy) {
-                ctx.uncovered = true
+                ctx.uncovered   = true
                 ctx.observers.clear()
-                ctx.handlers = []
+                ctx.handlers    = []
+                ctx.root        = null
                 ctx.store.prop  = new WeakMap()
                 ctx.store.path  = new WeakMap()
                 ctx.store.proxy = new WeakMap()
@@ -89,6 +93,20 @@ module.exports = (api) => {
 
         /*  helper function for transitioning from target to proxy  */
         proxy: (target) => ctx.store.proxy.get(target) || target,
+
+        /*  locate a target object by path from root target object  */
+        locateTarget: (path) => {
+            let target = ctx.root
+            if (path !== "") {
+                for (const property of path.split(".")) {
+                    if (!(typeof target === "object" || typeof target === "function"))
+                        throw new Error(`cannot step down to property "${property}" " +
+                            "in path "${path}" -- parent is not an object or function`)
+                    target = target[property]
+                }
+            }
+            return target
+        },
 
         /*  helper function for concatenating a property name onto a path string  */
         concatPath: (path, property) => {
