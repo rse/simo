@@ -5,6 +5,7 @@
     "keywords":    [ "mutable", "object", "change", "tracking", "proxy" ],
     "main":        "lib/simo.node.js",
     "browser":     "lib/simo.browser.js",
+    "types":       "src/simo.d.ts",
     "license":     "MIT",
     "repository": {
         "type": "git",
