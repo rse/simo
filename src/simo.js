@@ -40,7 +40,7 @@ const api = {
     /*  API function: cover an object for observing changes  */
     cover (object) {
         /*  instanciate the Proxy context  */
-        const ctx = simoContext(api, object)
+        const ctx = simoContext(api)
         simoProxyOpaque(ctx)
         simoProxyMap(ctx)
         simoProxySet(ctx)
