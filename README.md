@@ -133,8 +133,9 @@ SIMO provides the following API:
 - `simo.cover(object: Object): SIMO`
 - `simo.target(simo: SIMO): Object`
 - `simo.uncover(simo: SIMO): Object`
-- `simo.observe(simo: SIMO, callback: (event: String, ...args: any[]) => void): Symbol`
+- `simo.observe(simo: SIMO, callback: (event: String, args: any[]) => void): Symbol`
 - `simo.unobserve(simo: SIMO, id: Symbol): void`
+- `simo.sanity(): void`
 
 Implementation Notice
 ---------------------

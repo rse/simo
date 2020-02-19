@@ -55,7 +55,22 @@ const api = {
     target:    (proxy, ...args) => proxy[api.METHOD_TARGET](proxy, ...args),
     uncover:   (proxy, ...args) => proxy[api.METHOD_UNCOVER](proxy, ...args),
     observe:   (proxy, ...args) => proxy[api.METHOD_OBSERVE](proxy, ...args),
-    unobserve: (proxy, ...args) => proxy[api.METHOD_UNOBSERVE](proxy, ...args)
+    unobserve: (proxy, ...args) => proxy[api.METHOD_UNOBSERVE](proxy, ...args),
+
+    /*  sanity check run-time environment  */
+    sanity: () => {
+        if (!(   typeof Reflect === "object"
+              && typeof Proxy   === "function"
+              && typeof Symbol  === "function"
+              && typeof Map     === "function"
+              && typeof WeakMap === "function"
+              && typeof Set     === "function"
+              && typeof WeakSet === "function"))
+            throw new Error(
+                "SIMO requires at least a sane ECMAScript 2015 run-time environment " +
+                "with the APIs Reflect, Proxy, Symbol, Map, WeakMap, Set and WeakSet!"
+            )
+    }
 }
 
 /*  export the API  */
