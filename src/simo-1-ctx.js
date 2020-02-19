@@ -22,6 +22,8 @@
 **  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+const simoSerial = require("./simo-6-serial")
+
 module.exports = (api) => {
     /*  the internal Proxy context  */
     const ctx = {
@@ -85,6 +87,12 @@ module.exports = (api) => {
             /*  "unobserve"  */
             [api.METHOD_UNOBSERVE] (proxy, id) {
                 ctx.observers.delete(id)
+            },
+
+            /*  "serialize"  */
+            [api.METHOD_SERIALIZE] (proxy, ...args) {
+                const target = proxy[ctx.TARGET]
+                return simoSerial.serialize(ctx, target, ...args)
             }
         },
 

@@ -40,6 +40,7 @@ let obj = {
         }
     }
 }
+obj.foo.bar.func.test = "test"
 
 console.log(obj)
 
@@ -53,7 +54,7 @@ simo.observe(obj, (event, ...args) => {
 
 obj.foo.bar.boolean = false
 obj.foo.bar.number = 7
-obj.foo.bar.regexp = /bar/
+obj.foo.bar.regexp = /bar/gm
 obj.foo.bar.string = "bar"
 obj.foo.bar.date.setSeconds(1)
 obj.foo.bar.object.k2 = "bar"
@@ -64,5 +65,8 @@ obj.foo.bar.set.add("v3")
 obj.foo.bar.set.delete("v1")
 obj.foo.bar.func()
 
+console.log(obj)
+console.log(simo.serialize(obj))
+obj = simo.unserialize(simo.serialize(obj))
 console.log(obj)
 

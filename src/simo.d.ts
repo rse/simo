@@ -29,6 +29,8 @@ declare module "simo" {
         uncover(simo: any): any
         observe(simo: any, callback: (event: String, args: any[]) => void): Symbol
         unobserve(simo: any, id: Symbol): void
+        serialize(simo: any): String
+        unserialize(blob: String): any
         sanity(): void
     }
     const simo: simo

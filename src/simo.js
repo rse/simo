@@ -28,14 +28,16 @@ const simoProxyOpaque = require("./simo-2-proxy-opaque")
 const simoProxyMap    = require("./simo-3-proxy-map")
 const simoProxySet    = require("./simo-4-proxy-set")
 const simoProxyObject = require("./simo-5-proxy-object")
+const simoSerial      = require("./simo-6-serial")
 
 /*  the API  */
 const api = {
     /*  the API method symbols  */
-    METHOD_TARGET:    Symbol("target"),
-    METHOD_UNCOVER:   Symbol("uncover"),
-    METHOD_OBSERVE:   Symbol("observe"),
-    METHOD_UNOBSERVE: Symbol("unobserve"),
+    METHOD_TARGET:      Symbol("target"),
+    METHOD_UNCOVER:     Symbol("uncover"),
+    METHOD_OBSERVE:     Symbol("observe"),
+    METHOD_UNOBSERVE:   Symbol("unobserve"),
+    METHOD_SERIALIZE:   Symbol("serialize"),
 
     /*  API function: cover an object for observing changes  */
     cover (object) {
@@ -55,10 +57,12 @@ const api = {
 
     /*  additional API function entry points for "beaming"
         into the context (ctx) of the proxy object  */
-    target:    (proxy, ...args) => proxy[api.METHOD_TARGET](proxy, ...args),
-    uncover:   (proxy, ...args) => proxy[api.METHOD_UNCOVER](proxy, ...args),
-    observe:   (proxy, ...args) => proxy[api.METHOD_OBSERVE](proxy, ...args),
-    unobserve: (proxy, ...args) => proxy[api.METHOD_UNOBSERVE](proxy, ...args),
+    target:      (proxy, ...args) => proxy[api.METHOD_TARGET](proxy, ...args),
+    uncover:     (proxy, ...args) => proxy[api.METHOD_UNCOVER](proxy, ...args),
+    observe:     (proxy, ...args) => proxy[api.METHOD_OBSERVE](proxy, ...args),
+    unobserve:   (proxy, ...args) => proxy[api.METHOD_UNOBSERVE](proxy, ...args),
+    serialize:   (proxy, ...args) => proxy[api.METHOD_SERIALIZE](proxy, ...args),
+    unserialize: (       ...args) => simoSerial.unserialize(api, ...args),
 
     /*  sanity check run-time environment  */
     sanity: () => {
