@@ -24,8 +24,7 @@ SIMO is a library for JavaScript (for use in the Node and Browser
 environment), providing simple mutable objects with the automatic and
 detailed tracking of changes. It allows one to craft mutable object
 trees with the help of JavaScript types `Boolean`, `Number`, `String`,
-`RegExp`, `Date`, `Object`, `Array`, `Map`, `WeakMap`, `Set`, `WeakSet`,
-and `Function`.
+`RegExp`, `Date`, `Object`, `Array`, `Map`, `Set` and `Function`.
 
 Example
 -------

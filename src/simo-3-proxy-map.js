@@ -167,7 +167,7 @@ module.exports = (ctx) => {
     ctx.handlers.push({
         name:  "map",
         prio:  2,
-        probe: (value) => (value instanceof Map || value instanceof WeakMap),
+        probe: (value) => (value instanceof Map),
         handler
     })
 }

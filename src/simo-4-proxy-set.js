@@ -174,7 +174,7 @@ module.exports = (ctx) => {
     ctx.handlers.push({
         name:  "set",
         prio:  3,
-        probe: (value) => (value instanceof Set || value instanceof WeakSet),
+        probe: (value) => (value instanceof Set),
         handler
     })
 }
