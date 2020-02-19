@@ -206,6 +206,12 @@ module.exports = (api) => {
         },
 
         /*  handle a data change operation  */
+        change: (target, property, valueOld, valueNew) => {
+            const path = ctx.concatPath(ctx.store.path.get(target), property)
+            ctx.emit("change", path, target, property, valueOld, valueNew)
+        },
+
+        /*  emit an event  */
         emit: (event, ...args) => {
             if (ctx.uncovered)
                 return

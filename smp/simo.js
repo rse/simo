@@ -46,7 +46,7 @@ console.log(obj)
 obj = simo.cover(obj)
 simo.observe(obj, (event, ...args) => {
     if (event === "change") {
-        let [ path, valueOld, valueNew ] = args
+        let [ path, target, property, valueOld, valueNew ] = args
         console.log(`change: ${path}: ${valueOld} -> ${valueNew}`)
     }
 })

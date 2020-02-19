@@ -67,7 +67,7 @@ module.exports = (ctx) => {
 
             /*  handle change if value has really changed  */
             if (!ctx.uncovered && !Object.is(valueOld, value))
-                ctx.emit("change", ctx.concatPath(ctx.store.path.get(target), property), valueOld, value)
+                ctx.change(target, property, valueOld, value)
 
             return result
         },
@@ -82,7 +82,7 @@ module.exports = (ctx) => {
             /*  invalidate property descriptor cache and handle change  */
             if (!ctx.uncovered) {
                 ctx.invalidateCachedDescriptor(target, property)
-                ctx.emit("change", ctx.concatPath(ctx.store.path.get(target), property), undefined, descriptor.value)
+                ctx.change(target, property, undefined, descriptor.value)
             }
 
             return result
@@ -107,7 +107,7 @@ module.exports = (ctx) => {
             /*  invalidate property descriptor cache and handle change  */
             if (!ctx.uncovered) {
                 ctx.invalidateCachedDescriptor(target, property)
-                ctx.emit("change", ctx.concatPath(ctx.store.path.get(target), property), valueOld, undefined)
+                ctx.change(target, property, valueOld, undefined)
             }
 
             return result

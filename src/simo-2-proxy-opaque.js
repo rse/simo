@@ -64,9 +64,14 @@ module.exports = (ctx) => {
 
             /*  handle change explicitly if value was changed  */
             if (!Object.is(valueOld, thisArg[ctx.TARGET].valueOf())) {
-                let path = ctx.store.path.get(target)
-                path = path.slice(0, Math.max(path.lastIndexOf("."), 0))
-                ctx.emit("change", path, valueOld, thisArg[ctx.TARGET].valueOf())
+                const segments = ctx.store.path.get(target).split(".")
+                if (segments.length < 2)
+                    throw new Error("unexpected situation: path to method of opaque type to short")
+                segments.pop()
+                const property = segments.pop()
+                const path = segments.join(".")
+                const parent = ctx.locateTarget(path)
+                ctx.change(parent, property, valueOld, thisArg[ctx.TARGET].valueOf())
             }
 
             /*  return result of method application  */

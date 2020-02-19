@@ -80,7 +80,7 @@ module.exports = (ctx) => {
 
             /*  handle change if value has really changed  */
             if (!ctx.uncovered && !Object.is(valueOld, value))
-                ctx.emit("change", ctx.concatPath(ctx.store.path.get(target), property), valueOld, value)
+                ctx.change(target, property, valueOld, value)
 
             return result
         },
@@ -153,9 +153,7 @@ module.exports = (ctx) => {
 
             /*  handle changes  */
             changes.forEach((entry) => {
-                let path = ctx.store.path.get(target)
-                path = path.slice(0, Math.max(path.lastIndexOf("."), 0))
-                ctx.emit("change", ctx.concatPath(path, entry.property), entry.valueOld, entry.value)
+                ctx.change(map, entry.property, entry.valueOld, entry.value)
             })
 
             /*  return result of method application  */
