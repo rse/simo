@@ -176,14 +176,10 @@ module.exports = (api) => {
                 }
             }
 
-            /*  determine and remember path to target  */
+            /*  determine and remember (first seen, in case of a graph) path to target  */
             const path = parent && property ?
                 ctx.concatPath(ctx.store.path.get(parent), property) : ""
-            const pathExisting = ctx.store.path.get(target)
-            if (pathExisting !== undefined && pathExisting !== path)
-                throw new Error("multiple paths to same target object detected " +
-                    "(you accidentally created a graph instead of tree)")
-            if (pathExisting === undefined)
+            if (!ctx.store.path.has(target))
                 ctx.store.path.set(target, path)
 
             /*  fetch existing or build new proxy  */
