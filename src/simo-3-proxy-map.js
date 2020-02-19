@@ -80,7 +80,7 @@ module.exports = (ctx) => {
 
             /*  handle change if value has really changed  */
             if (!ctx.uncovered && !Object.is(valueOld, value))
-                ctx.change(target, property, valueOld, value)
+                ctx.change(target, property, "update", valueOld, value)
 
             return result
         },
@@ -131,21 +131,23 @@ module.exports = (ctx) => {
                 }, that)
             }
             else if (target.name === "set") {
+                const valueWas = map.has(argumentsList[0])
                 const valueOld = map.get(argumentsList[0])
                 result = Reflect.apply(target, map, argumentsList)
                 if (!Object.is(valueOld, map.get(argumentsList[0])))
-                    changes.push({ property: argumentsList[0], valueOld, value: argumentsList[1] })
+                    changes.push({ property: argumentsList[0],
+                        op: valueWas ? "update" : "create", valueOld, value: argumentsList[1] })
             }
             else if (target.name === "delete") {
                 const valueWas = map.has(argumentsList[0])
                 const valueOld = map.get(argumentsList[0])
                 result = Reflect.apply(target, map, argumentsList)
                 if (valueWas && !map.has(argumentsList[0]))
-                    changes.push({ property: argumentsList[0], valueOld, value: undefined })
+                    changes.push({ property: argumentsList[0], op: "delete", valueOld, value: undefined })
             }
             else if (target.name === "clear") {
                 for (const [ property, valueOld ] of map.entries())
-                    changes.push({ property, valueOld, value: undefined })
+                    changes.push({ property, op: "delete", valueOld, value: undefined })
                 result = Reflect.apply(target, map, argumentsList)
             }
             else
@@ -153,7 +155,7 @@ module.exports = (ctx) => {
 
             /*  handle changes  */
             changes.forEach((entry) => {
-                ctx.change(map, entry.property, entry.valueOld, entry.value)
+                ctx.change(map, entry.property, entry.op, entry.valueOld, entry.value)
             })
 
             /*  return result of method application  */

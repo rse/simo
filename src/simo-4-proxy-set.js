@@ -133,8 +133,10 @@ module.exports = (ctx) => {
                 }, that)
             }
             else if (target.name === "add") {
+                const valueWas = set.has(argumentsList[0])
                 result = Reflect.apply(target, set, argumentsList)
-                changes.push({ property: set.size, undefined, value: argumentsList[0] })
+                if (!valueWas)
+                    changes.push({ property: set.size, op: "create", valueOld: undefined, value: argumentsList[0] })
             }
             else if (target.name === "delete") {
                 const valueWas = set.has(argumentsList[0])
@@ -147,12 +149,12 @@ module.exports = (ctx) => {
                 }
                 result = Reflect.apply(target, set, argumentsList)
                 if (valueWas && !set.has(argumentsList[0]))
-                    changes.push({ property: i, valueOld, value: undefined })
+                    changes.push({ property: i, op: "delete", valueOld, value: undefined })
             }
             else if (target.name === "clear") {
                 let i = 0
                 for (const valueOld of set.values())
-                    changes.push({ property: i++, valueOld, value: undefined })
+                    changes.push({ property: i++, op: "delete", valueOld, value: undefined })
                 result = Reflect.apply(target, set, argumentsList)
             }
             else
@@ -160,7 +162,7 @@ module.exports = (ctx) => {
 
             /*  handle changes  */
             changes.forEach((entry) => {
-                ctx.change(set, entry.property, entry.valueOld, entry.value)
+                ctx.change(set, entry.property, entry.op, entry.valueOld, entry.value)
             })
 
             /*  return result of method application  */

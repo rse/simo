@@ -54,9 +54,12 @@ module.exports = (ctx) => {
             ctx.emit("debug", "handler: object: set", target, property, value, receiver)
 
             /*  fetch the old value  */
+            let valueWas
             let valueOld
-            if (!ctx.uncovered)
+            if (!ctx.uncovered) {
+                valueWas = Reflect.has(target, property)
                 valueOld = Reflect.get(target, property, receiver)
+            }
 
             /*  optionally fetch target object of proxy object for new value  */
             if (value && typeof value === "object" && value[ctx.TARGET] !== undefined)
@@ -67,7 +70,7 @@ module.exports = (ctx) => {
 
             /*  handle change if value has really changed  */
             if (!ctx.uncovered && !Object.is(valueOld, value))
-                ctx.change(target, property, valueOld, value)
+                ctx.change(target, property, valueWas ? "update" : "create", valueOld, value)
 
             return result
         },
@@ -82,7 +85,7 @@ module.exports = (ctx) => {
             /*  invalidate property descriptor cache and handle change  */
             if (!ctx.uncovered) {
                 ctx.invalidateCachedDescriptor(target, property)
-                ctx.change(target, property, undefined, descriptor.value)
+                ctx.change(target, property, "create", undefined, descriptor.value)
             }
 
             return result
@@ -107,7 +110,7 @@ module.exports = (ctx) => {
             /*  invalidate property descriptor cache and handle change  */
             if (!ctx.uncovered) {
                 ctx.invalidateCachedDescriptor(target, property)
-                ctx.change(target, property, valueOld, undefined)
+                ctx.change(target, property, "delete", valueOld, undefined)
             }
 
             return result

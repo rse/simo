@@ -71,7 +71,7 @@ module.exports = (ctx) => {
                 const property = segments.pop()
                 const path = segments.join(".")
                 const parent = ctx.locateTarget(path)
-                ctx.change(parent, property, valueOld, thisArg[ctx.TARGET].valueOf())
+                ctx.change(parent, property, "update", valueOld, thisArg[ctx.TARGET].valueOf())
             }
 
             /*  return result of method application  */

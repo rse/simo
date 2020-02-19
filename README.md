@@ -55,8 +55,8 @@ console.log(obj)
 obj = simo.cover(obj)
 simo.observe(obj, (event, ...args) => {
     if (event === "change") {
-        let [ path, valueOld, valueNew ] = args
-        console.log(`change: ${path}: ${valueOld} -> ${valueNew}`)
+        let [ path, target, property, op, valueOld, valueNew ] = args
+        console.log(`change: ${path}: ${valueOld} --(${op})-> ${valueNew}`)
     }
 })
 
@@ -95,18 +95,18 @@ Output:
     }
   }
 }
-change: foo.bar.boolean: true -> false
-change: foo.bar.number: 42 -> 7
-change: foo.bar.regexp: /foo/i -> /bar/
-change: foo.bar.string: foo -> bar
-change: foo.bar.date: 1577836800000 -> 1577836801000
-change: foo.bar.object.k2: v2 -> bar
-change: foo.bar.array.2: undefined -> bar
-change: foo.bar.map.k2: v2 -> bar
-change: foo.bar.map.k1: v1 -> undefined
-change: foo.bar.set.3: undefined -> v3
-change: foo.bar.set.0: v1 -> undefined
-change: foo.bar.array.3: undefined -> baz
+change: foo.bar.boolean: true --(update)-> false
+change: foo.bar.number: 42 --(update)-> 7
+change: foo.bar.regexp: /foo/i --(update)-> /bar/
+change: foo.bar.string: foo --(update)-> bar
+change: foo.bar.date: 1577836800000 --(update)-> 1577836801000
+change: foo.bar.object.k2: v2 --(update)-> bar
+change: foo.bar.array.2: undefined --(create)-> bar
+change: foo.bar.map.k2: v2 --(update)-> bar
+change: foo.bar.map.k1: v1 --(delete)-> undefined
+change: foo.bar.set.3: undefined --(create)-> v3
+change: foo.bar.set.0: v1 --(delete)-> undefined
+change: foo.bar.array.3: undefined --(create)-> baz
 {
   foo: {
     bar: {
