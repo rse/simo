@@ -64,9 +64,9 @@ module.exports = (api) => {
                 ctx.uncovered = true
                 ctx.observers.clear()
                 ctx.handlers = []
-                ctx.cache.prop  = null
-                ctx.cache.path  = null
-                ctx.cache.proxy = null
+                ctx.cache.prop  = new WeakMap()
+                ctx.cache.path  = new WeakMap()
+                ctx.cache.proxy = new WeakMap()
                 return proxy[ctx.TARGET]
             },
 
