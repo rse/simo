@@ -36,7 +36,7 @@ module.exports = (ctx) => {
             /*  short-circuit top-level methods  */
             if (   typeof property === "symbol"
                 && ctx.methods[property] !== undefined
-                && ctx.cache.path.get(target) === "")
+                && ctx.store.path.get(target) === "")
                 return ctx.methods[property]
 
             /*  pass-through operation  */
@@ -64,7 +64,7 @@ module.exports = (ctx) => {
 
             /*  handle change explicitly if value was changed  */
             if (!Object.is(valueOld, thisArg[ctx.TARGET].valueOf())) {
-                let path = ctx.cache.path.get(target)
+                let path = ctx.store.path.get(target)
                 path = path.slice(0, Math.max(path.lastIndexOf("."), 0))
                 ctx.emit("change", path, valueOld, thisArg[ctx.TARGET].valueOf())
             }

@@ -41,8 +41,8 @@ module.exports = (api) => {
         /*  the Proxy object handlers  */
         handlers: [],
 
-        /*  the local caches for properties, paths and proxy objects  */
-        cache: {
+        /*  the store for target paths, proxy objects and properties descriptors  */
+        store: {
             path:  new WeakMap(), /* maps targets to path   */
             proxy: new WeakMap(), /* maps targets to proxy  */
             prop:  new WeakMap()  /* maps targets to property descriptors  */
@@ -64,9 +64,9 @@ module.exports = (api) => {
                 ctx.uncovered = true
                 ctx.observers.clear()
                 ctx.handlers = []
-                ctx.cache.prop  = new WeakMap()
-                ctx.cache.path  = new WeakMap()
-                ctx.cache.proxy = new WeakMap()
+                ctx.store.prop  = new WeakMap()
+                ctx.store.path  = new WeakMap()
+                ctx.store.proxy = new WeakMap()
                 return proxy[ctx.TARGET]
             },
 
@@ -84,6 +84,12 @@ module.exports = (api) => {
             }
         },
 
+        /*  helper function for transitioning from proxy to target  */
+        target: (proxy) => proxy[ctx.TARGET] || proxy,
+
+        /*  helper function for transitioning from target to proxy  */
+        proxy: (target) => ctx.store.proxy.get(target) || target,
+
         /*  helper function for concatenating a property name onto a path string  */
         concatPath: (path, property) => {
             if (path)
@@ -95,10 +101,10 @@ module.exports = (api) => {
         /*  determine own property descriptor  */
         getOwnPropertyDescriptor: (target, property) => {
             /*  fetch or create property set of target  */
-            let props = ctx.cache.prop.get(target)
+            let props = ctx.store.prop.get(target)
             if (props === undefined) {
                 props = new Map()
-                ctx.cache.prop.set(target, props)
+                ctx.store.prop.set(target, props)
             }
 
             /*  fetch or determine property of target  */
@@ -113,7 +119,7 @@ module.exports = (api) => {
 
         /*  invalidate cached property  */
         invalidateCachedDescriptor: (target, property) => {
-            const props = ctx.cache.prop.get(target)
+            const props = ctx.store.prop.get(target)
             if (props)
                 props.delete(property)
         },
@@ -154,16 +160,16 @@ module.exports = (api) => {
 
             /*  determine and remember path to target  */
             const path = parent && property ?
-                ctx.concatPath(ctx.cache.path.get(parent), property) : ""
-            const pathExisting = ctx.cache.path.get(target)
+                ctx.concatPath(ctx.store.path.get(parent), property) : ""
+            const pathExisting = ctx.store.path.get(target)
             if (pathExisting !== undefined && pathExisting !== path)
                 throw new Error("multiple paths to same target object detected " +
                     "(you accidentally created a graph instead of tree)")
             if (pathExisting === undefined)
-                ctx.cache.path.set(target, path)
+                ctx.store.path.set(target, path)
 
             /*  fetch existing or build new proxy  */
-            let proxy = ctx.cache.proxy.get(target)
+            let proxy = ctx.store.proxy.get(target)
             if (proxy === undefined) {
                 if (!handler) {
                     for (const entry of ctx.handlers.sort((a, b) => a.prio - b.prio)) {
@@ -176,7 +182,7 @@ module.exports = (api) => {
                         throw new Error("no handler found")
                 }
                 proxy = new Proxy(target, handler)
-                ctx.cache.proxy.set(target, proxy)
+                ctx.store.proxy.set(target, proxy)
             }
             return proxy
         },
