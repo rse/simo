@@ -41,6 +41,7 @@ let obj = {
     }
 }
 obj.foo.bar.func.test = "test"
+obj.foo.bar2 = obj.foo.bar
 
 console.log(obj)
 

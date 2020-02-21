@@ -22,6 +22,7 @@
 **  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+const simoUtil   = require("./simo-0-util")
 const simoSerial = require("./simo-6-serial")
 
 module.exports = (api) => {
@@ -92,7 +93,7 @@ module.exports = (api) => {
             /*  "serialize"  */
             [api.METHOD_SERIALIZE] (proxy, ...args) {
                 const target = proxy[ctx.TARGET]
-                return simoSerial.serialize(ctx, target, ...args)
+                return simoSerial.serialize(target, ...args)
             }
         },
 
@@ -114,14 +115,6 @@ module.exports = (api) => {
                 }
             }
             return target
-        },
-
-        /*  helper function for concatenating a property name onto a path string  */
-        concatPath: (path, property) => {
-            if (path)
-                path += "."
-            path += property.toString()
-            return path
         },
 
         /*  determine own property descriptor  */
@@ -186,7 +179,7 @@ module.exports = (api) => {
 
             /*  determine and remember (first seen, in case of a graph) path to target  */
             const path = parent && property ?
-                ctx.concatPath(ctx.store.path.get(parent), property) : ""
+                simoUtil.concatPath(ctx.store.path.get(parent), property) : ""
             if (!ctx.store.path.has(target))
                 ctx.store.path.set(target, path)
 
@@ -211,7 +204,7 @@ module.exports = (api) => {
 
         /*  handle a data change operation  */
         change: (target, property, op, valueOld, valueNew) => {
-            const path = ctx.concatPath(ctx.store.path.get(target), property)
+            const path = simoUtil.concatPath(ctx.store.path.get(target), property)
             ctx.emit("change", path, target, property, op, valueOld, valueNew)
         },
 
